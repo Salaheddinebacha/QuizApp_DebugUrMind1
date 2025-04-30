@@ -116,7 +116,7 @@ public class Quiz1 extends AppCompatActivity {
                 } else if (voiceAnswer.contains("JAVASCRIPT") || voiceAnswer.contains("JS")) {
                     simulateClick(optionJS);
                 } else {
-                    Toast.makeText(this, "Réponse non reconnue : " + voiceAnswer, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Votre Réponse non reconnue : " + voiceAnswer, Toast.LENGTH_SHORT).show();
                 }
             }
         }
