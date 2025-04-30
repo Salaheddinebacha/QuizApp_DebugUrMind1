@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "228579232561",
+    "project_id": "quizappbachasalaheddine",
+    "storage_bucket": "quizappbachasalaheddine.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228579232561:android:af729bca16564edeaa3e10",
+        "android_client_info": {
+          "package_name": "com.example.lab03_bacha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwFkcq7plMPTaNOE7-_yQJuN3x-vMXtJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
