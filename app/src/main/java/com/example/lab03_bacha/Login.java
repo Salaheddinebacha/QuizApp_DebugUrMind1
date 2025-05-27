@@ -18,48 +18,58 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
 
-    EditText etLogin, etPassword;
-    Button bLogin;
-    TextView tvRegister;
+    // Déclaration des champs de saisie et boutons de l'interface
+    EditText etLogin, etPassword;  // Champs pour l'email et le mot de passe
+    Button bLogin;                 // Bouton pour lancer la connexion
+    TextView tvRegister;           // Lien texte pour aller à l'inscription
 
-    // Firebase
+    // Instance Firebase pour l'authentification
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Liaison avec le fichier XML qui décrit l'interface graphique
         setContentView(R.layout.activity_login);
 
+        // Récupération des références des composants dans le layout via leurs IDs
         etLogin = findViewById(R.id.etMail);
         etPassword = findViewById(R.id.etPassword);
         bLogin = findViewById(R.id.bLogin);
         tvRegister = findViewById(R.id.tvRegister);
 
-        // Initialize Firebase Auth
+        // Initialisation de l'instance FirebaseAuth pour gérer l'authentification
         mAuth = FirebaseAuth.getInstance();
 
+        // Gestionnaire de clic sur le bouton de connexion
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Récupérer les valeurs saisies par l'utilisateur, en supprimant les espaces inutiles
                 String email = etLogin.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
+                // Vérifier que les deux champs ne sont pas vides
                 if (email.isEmpty() || password.isEmpty()) {
+                    // Afficher un message d'erreur si un champ est vide
                     Toast.makeText(Login.this, "Veuillez remplir tous les champs.", Toast.LENGTH_SHORT).show();
-                    return;
+                    return; // Arrêter le traitement ici
                 }
 
-                // Authentification via Firebase
+                // Lancer la procédure d'authentification Firebase avec l'email et mot de passe
                 mAuth.signInWithEmailAndPassword(email, password)
+                        // Ajouter un listener pour récupérer le résultat de la tentative de connexion
                         .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                // Si la connexion a réussi
                                 if (task.isSuccessful()) {
-                                    // Connexion réussie
-                                    startActivity(new Intent(Login.this, Localisation.class));
-                                    finish(); // éviter retour arrière
+                                    // Rediriger vers l'activité Localisation
+                                    startActivity(new Intent(Login.this, Quiz1.class));
+                                    // Finir cette activité pour ne pas pouvoir revenir en arrière
+                                    finish();
                                 } else {
-                                    // Erreur de connexion
+                                    // Sinon, afficher un message d'erreur à l'utilisateur
                                     Toast.makeText(Login.this, "Email ou mot de passe incorrect !", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -67,9 +77,11 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        // Gestionnaire de clic sur le texte "S'inscrire"
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Ouvrir l'activité d'inscription Register
                 startActivity(new Intent(Login.this, Register.class));
             }
         });

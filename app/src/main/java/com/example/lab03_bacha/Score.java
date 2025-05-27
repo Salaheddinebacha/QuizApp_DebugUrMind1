@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
 public class Score extends AppCompatActivity {
 
+    // Déclaration des vues : affichage du score, barre de progression et boutons
     TextView tvScore;
     ProgressBar progressBar;
     Button bLogout, bTry;
@@ -20,15 +20,15 @@ public class Score extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_score);
+        setContentView(R.layout.activity_score); // Liaison avec le layout XML
 
-        // Récupération des vues depuis le layout XML
+        // Récupération des composants UI par leurs IDs
         tvScore = findViewById(R.id.tvScore);
         progressBar = findViewById(R.id.progressBar);
         bLogout = findViewById(R.id.bLogout);
         bTry = findViewById(R.id.bTry);
 
-        // Récupération du score total et du score max depuis l'intent
+        // Récupération des données transmises via l'intent : score obtenu et score maximal
         int score = getIntent().getIntExtra("score", 0);
         int maxScore = getIntent().getIntExtra("maxScore", 5);
 
@@ -38,30 +38,32 @@ public class Score extends AppCompatActivity {
         // Affichage du pourcentage dans le TextView
         tvScore.setText(percentage + "%");
 
+        // Récupérer l'utilisateur connecté via Firebase Authentication
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String email = user.getEmail();
+            // Envoi du score vers Supabase (méthode externe que tu dois avoir définie)
             SupabaseClient.envoyerScore(email, percentage);
         }
 
+        // Configuration de la ProgressBar
+        progressBar.setMax(100);        // Maximum fixé à 100 (pourcentage)
+        progressBar.setProgress(percentage);  // Remplissage de la barre selon le score, sans animation
 
-        // Mise à jour de la ProgressBar avec le score (fixe, non animée)
-        progressBar.setMax(100); // On fixe le maximum à 100 pour correspondre au %
-        progressBar.setProgress(percentage); // On affiche directement le pourcentage sans animation
-
-        // Bouton "Logout" : retourne à la première activité (ou login si tu veux)
+        // Gestion du clic sur le bouton "Logout"
         bLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(Score.this, Login.class); // à adapter si page de login différente
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Nettoie la pile d'activités
+            // Crée un intent vers l'activité de login (ou première activité)
+            Intent intent = new Intent(Score.this, Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Nettoyer la pile d'activités (pas de retour possible)
             startActivity(intent);
-            finish();
+            finish(); // Terminer cette activité
         });
 
-        // Bouton "Try again" : recommence le quiz depuis la première question
+        // Gestion du clic sur le bouton "Try again" pour recommencer le quiz
         bTry.setOnClickListener(v -> {
-            Intent intent = new Intent(Score.this, Quiz1.class); // à adapter selon ta première page
+            Intent intent = new Intent(Score.this, Quiz1.class); // Lancer la première question du quiz
             startActivity(intent);
-            finish();
+            finish(); // Fermer cette activité
         });
     }
 }
